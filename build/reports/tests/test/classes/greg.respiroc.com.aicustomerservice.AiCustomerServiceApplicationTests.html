@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - AiCustomerServiceApplicationTests</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>AiCustomerServiceApplicationTests</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/greg.respiroc.com.aicustomerservice.html">greg.respiroc.com.aicustomerservice</a> &gt; AiCustomerServiceApplicationTests</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">1</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.360s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="tab-container">
+<ul class="tabLinks">
+<li>
+<a href="#">Tests</a>
+</li>
+<li>
+<a href="#">Standard output</a>
+</li>
+</ul>
+<div class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">contextLoads()</td>
+<td class="success">0.360s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre id="class-stdout">23:35:31.816 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [greg.respiroc.com.aicustomerservice.AiCustomerServiceApplicationTests]: AiCustomerServiceApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+23:35:31.859 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration greg.respiroc.com.aicustomerservice.AiCustomerServiceApplication for test class greg.respiroc.com.aicustomerservice.AiCustomerServiceApplicationTests
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::       (v3.5.8-SNAPSHOT)
+
+2025-11-19T23:35:32.039+07:00  INFO 67479 --- [ai-customer-service] [    Test worker] .r.c.a.AiCustomerServiceApplicationTests : Starting AiCustomerServiceApplicationTests using Java 17.0.12 with PID 67479 (started by nhuthuynh in /Users/nhuthuynh/workspace/ai-customer-service)
+2025-11-19T23:35:32.040+07:00  INFO 67479 --- [ai-customer-service] [    Test worker] .r.c.a.AiCustomerServiceApplicationTests : No active profile set, falling back to 1 default profile: &quot;default&quot;
+2025-11-19T23:35:32.600+07:00  INFO 67479 --- [ai-customer-service] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-11-19T23:35:32.694+07:00  INFO 67479 --- [ai-customer-service] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@21733cbe
+2025-11-19T23:35:32.694+07:00  INFO 67479 --- [ai-customer-service] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-11-19T23:35:32.710+07:00  INFO 67479 --- [ai-customer-service] [    Test worker] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:5432/aicustomer (PostgreSQL 15.15)
+2025-11-19T23:35:32.747+07:00  INFO 67479 --- [ai-customer-service] [    Test worker] o.f.core.internal.command.DbValidate     : Successfully validated 1 migration (execution time 00:00.018s)
+2025-11-19T23:35:32.787+07:00  INFO 67479 --- [ai-customer-service] [    Test worker] o.f.core.internal.command.DbMigrate      : Current version of schema &quot;public&quot;: 1
+2025-11-19T23:35:32.789+07:00  INFO 67479 --- [ai-customer-service] [    Test worker] o.f.core.internal.command.DbMigrate      : Schema &quot;public&quot; is up to date. No migration necessary.
+2025-11-19T23:35:32.957+07:00  INFO 67479 --- [ai-customer-service] [    Test worker] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2025-11-19T23:35:33.220+07:00  INFO 67479 --- [ai-customer-service] [    Test worker] .r.c.a.AiCustomerServiceApplicationTests : Started AiCustomerServiceApplicationTests in 1.303 seconds (process running for 1.944)
+2025-11-19T23:35:33.221+07:00  INFO 67479 --- [ai-customer-service] [   scheduling-1] g.r.c.a.service.ProductSyncService       : Starting product sync from famme.no
+2025-11-19T23:35:33.360+07:00 ERROR 67479 --- [ai-customer-service] [   scheduling-1] i.n.r.d.DnsServerAddressStreamProviders  : Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'. Use DEBUG level to see the full stack: java.lang.UnsatisfiedLinkError: failed to load the required native library
+</pre>
+<button class="clipboard-copy-btn" aria-label="Copy to clipboard" data-copy-element-id="class-stdout">Copy</button>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="https://www.gradle.org">Gradle 9.2.1</a> at Nov 19, 2025, 11:35:34 PM</p>
+</div>
+</div>
+</body>
+</html>

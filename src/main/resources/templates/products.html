@@ -1,0 +1,89 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Products</title>
+
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+
+    <style>
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 10px; }
+        th { background: #f4f4f4; }
+        .add-form { margin-top: 20px; }
+    </style>
+</head>
+
+<body>
+
+<h1>Products</h1>
+
+<!-- Load button -->
+<button hx-get="/products/list"
+        hx-target="#products-table"
+        hx-swap="outerHTML"
+        id="load-btn">
+    Load products
+</button>
+
+<!-- Initial placeholder -->
+<div id="products-table">
+    <p>Click "Load products" to load products.</p>
+</div>
+
+<!-- ========== HTMX FRAGMENT ========== -->
+<div th:fragment="table">
+    <!-- Wrapper MUST include id="products-table" for outerHTML swap -->
+    <div id="products-table">
+
+        <!-- Show table ONLY when products is NOT empty -->
+        <div th:if="${products != null and not #lists.isEmpty(products)}">
+
+            <!-- Add form ABOVE the table -->
+            <div class="add-form">
+                <form id="add-product-form"
+                      th:action="@{/products}"
+                      method="post"
+                      hx-post="/products"
+                      hx-target="#products-table"
+                      hx-swap="outerHTML">
+
+                    <label>Title:
+                        <input type="text" name="title" required />
+                    </label>
+
+                    <label style="margin-left:20px;">Handle:
+                        <input type="text" name="handle" />
+                    </label>
+
+                    <button type="submit" style="margin-left:12px;">Add Product</button>
+                </form>
+            </div>
+
+            <!-- The table itself -->
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Handle</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="p : ${products}">
+                    <td th:text="${p.id}"></td>
+                    <td th:text="${p.title}"></td>
+                    <td th:text="${p.handle}"></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <!-- If products is empty ⇒ return EMPTY HTML (nothing visible) -->
+        <div th:if="${products != null and #lists.isEmpty(products)}"></div>
+
+    </div> <!-- /#products-table -->
+</div> <!-- /fragment -->
+</body>
+</html>

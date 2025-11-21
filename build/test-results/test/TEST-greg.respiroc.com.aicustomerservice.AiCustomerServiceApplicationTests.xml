@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="greg.respiroc.com.aicustomerservice.AiCustomerServiceApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-11-19T16:35:33.225Z" hostname="nhuthuynhs-MacBook-Pro.local" time="0.36">
+  <properties/>
+  <testcase name="contextLoads()" classname="greg.respiroc.com.aicustomerservice.AiCustomerServiceApplicationTests" time="0.36"/>
+  <system-out><![CDATA[23:35:31.816 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [greg.respiroc.com.aicustomerservice.AiCustomerServiceApplicationTests]: AiCustomerServiceApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+23:35:31.859 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration greg.respiroc.com.aicustomerservice.AiCustomerServiceApplication for test class greg.respiroc.com.aicustomerservice.AiCustomerServiceApplicationTests
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::       (v3.5.8-SNAPSHOT)
+
+2025-11-19T23:35:32.039+07:00  INFO 67479 --- [ai-customer-service] [    Test worker] .r.c.a.AiCustomerServiceApplicationTests : Starting AiCustomerServiceApplicationTests using Java 17.0.12 with PID 67479 (started by nhuthuynh in /Users/nhuthuynh/workspace/ai-customer-service)
+2025-11-19T23:35:32.040+07:00  INFO 67479 --- [ai-customer-service] [    Test worker] .r.c.a.AiCustomerServiceApplicationTests : No active profile set, falling back to 1 default profile: "default"
+2025-11-19T23:35:32.600+07:00  INFO 67479 --- [ai-customer-service] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-11-19T23:35:32.694+07:00  INFO 67479 --- [ai-customer-service] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@21733cbe
+2025-11-19T23:35:32.694+07:00  INFO 67479 --- [ai-customer-service] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-11-19T23:35:32.710+07:00  INFO 67479 --- [ai-customer-service] [    Test worker] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:5432/aicustomer (PostgreSQL 15.15)
+2025-11-19T23:35:32.747+07:00  INFO 67479 --- [ai-customer-service] [    Test worker] o.f.core.internal.command.DbValidate     : Successfully validated 1 migration (execution time 00:00.018s)
+2025-11-19T23:35:32.787+07:00  INFO 67479 --- [ai-customer-service] [    Test worker] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 1
+2025-11-19T23:35:32.789+07:00  INFO 67479 --- [ai-customer-service] [    Test worker] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2025-11-19T23:35:32.957+07:00  INFO 67479 --- [ai-customer-service] [    Test worker] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2025-11-19T23:35:33.220+07:00  INFO 67479 --- [ai-customer-service] [    Test worker] .r.c.a.AiCustomerServiceApplicationTests : Started AiCustomerServiceApplicationTests in 1.303 seconds (process running for 1.944)
+2025-11-19T23:35:33.221+07:00  INFO 67479 --- [ai-customer-service] [   scheduling-1] g.r.c.a.service.ProductSyncService       : Starting product sync from famme.no
+2025-11-19T23:35:33.360+07:00 ERROR 67479 --- [ai-customer-service] [   scheduling-1] i.n.r.d.DnsServerAddressStreamProviders  : Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'. Use DEBUG level to see the full stack: java.lang.UnsatisfiedLinkError: failed to load the required native library
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

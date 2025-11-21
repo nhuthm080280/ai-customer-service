@@ -1,0 +1,62 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Search Products</title>
+
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+
+    <style>
+        .search-row { display:flex; gap:8px; align-items:center; margin-bottom:12px; }
+        input[type="search"] { padding:8px; font-size:16px; width:420px; }
+        .spinner {
+            width:18px; height:18px; border-radius:50%;
+            border:3px solid rgba(0,0,0,0.12); border-top-color:#111;
+            animation: spin 1s linear infinite; display:none;
+        }
+        .search-loading .spinner { display:inline-block; margin-left:8px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<h1>Search Products</h1>
+
+<div class="search-row">
+    <!-- HTMX input: sends GET to /products/search/results when keyup/changed with 300ms debounce -->
+    <input
+            id="product-search"
+            type="search"
+            name="name"
+            placeholder="Type product title..."
+            hx-get="/products/search/results"
+            hx-target="#search-results"
+            hx-swap="outerHTML"
+            hx-trigger="keyup changed delay:300ms"
+            hx-params="serialize"
+            autocomplete="off"
+    />
+
+    <!-- hx-indicator: shown while request is in-flight -->
+    <div id="search-spinner" class="spinner" hx-indicator></div>
+</div>
+
+<!-- Results container: HTMX will replace this entire element (outerHTML) -->
+<div id="search-results">
+    <!-- Initially empty (or you can include a hint) -->
+    <p>Type to search products by title.</p>
+</div>
+
+<!-- Optional: small script to clear results on Esc -->
+<script>
+    document.getElementById('product-search').addEventListener('keydown', function(e){
+        if (e.key === 'Escape') {
+            this.value = '';
+            // trigger a request to clear results (or set hx-get to return empty)
+            this.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+    });
+</script>
+
+</body>
+</html>
