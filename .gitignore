@@ -25,3 +25,29 @@ replay_pid*
 
 # Kotlin Gradle plugin data, see https://kotlinlang.org/docs/whatsnew20.html#new-directory-for-kotlin-data-in-gradle-projects
 .kotlin/
+.gradle
+/build/
+/bin/
+./out/
+*.DS_Store
+.idea/
+.vscode/
+*.iml
+
+# Log files
+*.log
+
+#Package Files #
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Backup files
+*.bk
+*.bak
+
+### Cicle CI ###
+/test-results/
