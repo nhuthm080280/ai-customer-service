@@ -3,7 +3,7 @@ spring:
     name: ai-customer-service
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/aicustomer}
-    username: ${SPRING_DATASOURCE_USERNAME:dummy_postgres}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
     password: ${SPRING_DATASOURCE_PASSWORD:password}
     driver-class-name: org.postgresql.Driver
     hikari:

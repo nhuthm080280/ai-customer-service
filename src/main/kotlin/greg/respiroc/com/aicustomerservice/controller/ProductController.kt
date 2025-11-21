@@ -2,6 +2,8 @@ package greg.respiroc.com.aicustomerservice.controller
 
 import greg.respiroc.com.aicustomerservice.model.Product
 import greg.respiroc.com.aicustomerservice.repository.ProductRepository
+import greg.respiroc.com.aicustomerservice.service.ProductSyncService
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -14,11 +16,9 @@ import org.springframework.web.server.ResponseStatusException
 
 @Controller
 class ProductController(private val productRepository: ProductRepository) {
-
+    private val logger = LoggerFactory.getLogger(ProductController::class.java)
     @GetMapping("/products")
     fun productsPage(model: Model): String {
-        // initial page load - table empty until user clicks "Load products"
-//        model.addAttribute("products", emptyList<Any>())
         return "products"
     }
 
@@ -48,18 +48,17 @@ class ProductController(private val productRepository: ProductRepository) {
         return "products :: table"
     }
 
-    // Renders the search page (contains input + HTMX target)
     @GetMapping("/products/search")
     fun searchPage(): String {
-        return "products_search"   // new template: templates/products_search.html
+        return "products_search"
     }
 
-    // HTMX endpoint that returns the same table fragment (products :: table)
     @GetMapping("/products/search/results")
-    fun searchResults(@RequestParam name: String?, model: Model): String {
-        val results = productRepository.searchByTitle(name, 100)
+    fun searchResults(@RequestParam title: String?, model: Model): String {
+        logger.info("Searching for products with title: {}", title)
+        val results = productRepository.searchByTitle(title, 50)
+        logger.info("Found {} products", results.size)
         model.addAttribute("products", results)
-        // return fragment "products :: table" — our table only renders if products != null && not empty
-        return "products :: table"
+        return "products_search :: searchResults"
     }
 }

@@ -45,8 +45,8 @@ class ProductRepository(private val jdbcTemplate: JdbcTemplate) {
         return list.firstOrNull()
     }
 
-    fun searchByTitle(query: String?, limit: Int = 50): List<Product> {
-        if (query == null || query.isBlank()) return emptyList()
+    fun searchByTitle(title: String?, limit: Int = 50): List<Product> {
+        if (title.isNullOrBlank()) return emptyList()
 
         val sql = """
         SELECT id, title, handle
@@ -56,8 +56,8 @@ class ProductRepository(private val jdbcTemplate: JdbcTemplate) {
         LIMIT ?
     """.trimIndent()
 
-        val param = "%${query.trim()}%"
-        return jdbcTemplate.query(sql, arrayOf(param, limit)) { rs, _ ->
+        val pattern = "%${title.trim()}%"
+        return jdbcTemplate.query(sql, arrayOf(pattern, limit)) { rs, _ ->
             Product(
                 id = rs.getLong("id"),
                 title = rs.getString("title"),
