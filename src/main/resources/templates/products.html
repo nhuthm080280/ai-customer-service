@@ -83,6 +83,9 @@
                     <td th:text="${p.id}"></td>
                     <td th:text="${p.title}"></td>
                     <td th:text="${p.handle}"></td>
+                    <td>
+                        <a th:href="@{/products/{id}(id=${p.id})}">Update</a>
+                    </td>
                 </tr>
                 </tbody>
             </table>
