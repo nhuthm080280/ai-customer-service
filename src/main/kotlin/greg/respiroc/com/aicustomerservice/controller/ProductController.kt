@@ -6,8 +6,10 @@ import greg.respiroc.com.aicustomerservice.service.ProductSyncService
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
@@ -82,6 +84,24 @@ class ProductController(private val productRepository: ProductRepository) {
         logger.info("Updating product with id: {}", id)
         productRepository.upsertProduct(id, product.title, product.handle)
         logger.info("Product id {} updated successfully", id)
+        return "redirect:/products"
+    }
+
+    @DeleteMapping("/products/{id}")
+    fun deleteProduct(
+        @PathVariable id: Long,
+        request: HttpServletRequest
+    ): Any {
+        // delete from DB
+        logger.info("Deleting product with id: {}", id)
+        productRepository.delete(id)
+        logger.info("Product id {} deleted successfully", id)
+        // If this is an HTMX request, return an empty 200 body so hx-swap="outerHTML" removes the row
+        if (request.getHeader("HX-Request") != null) {
+            return ResponseEntity.ok("")
+        }
+
+        // Non-HTMX fallback: redirect to the list page
         return "redirect:/products"
     }
 }

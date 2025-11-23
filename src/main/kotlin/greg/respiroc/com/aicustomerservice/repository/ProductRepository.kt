@@ -66,4 +66,9 @@ class ProductRepository(private val jdbcTemplate: JdbcTemplate) {
         }
     }
 
+    fun delete(id: Long) {
+        val sql = "DELETE FROM products WHERE id = ?"
+        jdbcTemplate.update(sql, id)
+    }
+
 }
