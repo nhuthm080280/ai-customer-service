@@ -78,7 +78,8 @@
                     <th>ID</th>
                     <th>Title</th>
                     <th>Handle</th>
-                    <th>Actions</th>
+                    <th>Update</th>
+                    <th>Delete</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -88,6 +89,8 @@
                     <td th:text="${p.handle}"></td>
                     <td>
                         <a th:href="@{/products/{id}(id=${p.id})}">Update</a>
+                    </td>
+                    <td>
                         <!-- Delete button opens the confirmation dialog -->
                         <button type="button"
                                 class="delete-btn"
