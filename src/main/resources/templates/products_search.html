@@ -5,46 +5,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <title>Admin - Search Products</title>
     <script src="https://unpkg.com/htmx.org@1.9.2"></script>
-    <style>
-        :root{--sidebar:#111827; --accent:#2563eb; --muted:#6b7280; --card:#fff;}
-        body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#f4f6f8;color:#111}
-        .layout{display:flex;min-height:100vh}
-        .sidebar{width:220px;background:var(--sidebar);color:#fff;display:flex;flex-direction:column}
-        .brand{padding:18px;font-weight:700;border-bottom:1px solid rgba(255,255,255,0.06)}
-        .nav{padding:12px;flex:1}
-        .nav a{display:block;color:rgba(255,255,255,0.95);text-decoration:none;padding:8px 12px;border-radius:6px;margin-bottom:6px}
-        .nav a:hover{background:rgba(255,255,255,0.04)}
-        .content-wrap{flex:1;display:flex;flex-direction:column}
-        .topbar{background:#fff;padding:12px 20px;border-bottom:1px solid #e6e9ee;display:flex;align-items:center;justify-content:space-between}
-        .page{padding:20px;max-width:1100px;margin:18px auto;width:100%}
-        .card{background:var(--card);padding:16px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.04)}
-        .muted{color:var(--muted);}
-        input[type="search"]{
-            width:100%;padding:10px;font-size:16px;
-            border:1px solid #ddd;border-radius:6px;
-        }
-        .spinner{
-            width:18px;height:18px;border-radius:50%;
-            border:3px solid rgba(0,0,0,0.2);
-            border-top-color:black;animation:spin 1s linear infinite;
-            display:none;margin-top:8px;
-        }
-        [hx-indicator].htmx-request .spinner{display:inline-block;}
-        @keyframes spin{to{transform:rotate(360deg);}}
-        table{
-            width:100%;border-collapse:collapse;margin-top:16px;
-        }
-        th, td{
-            border:1px solid #ccc;padding:10px;text-align:left;
-        }
-        th{background:#f4f4f4;}
-        button{
-            padding:6px 12px;border:none;border-radius:6px;
-            background:var(--accent);color:#fff;cursor:pointer;
-        }
-        .delete-btn{background:#ef4444;}
-        @media(max-width:800px){ .sidebar{display:none;} }
-    </style>
+    <!-- Global Admin CSS -->
+    <link rel="stylesheet" th:href="@{/admin_styles.css}">
 </head>
 <body>
 
@@ -114,6 +76,7 @@
                                     </td>
                                     <td>
                                         <button type="button"
+                                                style="margin-left:8px;background:#ef4444"
                                                 class="delete-btn"
                                                 th:attr="data-id=${p.id}, data-title=${p.title}"
                                                 onclick="openDeleteDialog(this)">
