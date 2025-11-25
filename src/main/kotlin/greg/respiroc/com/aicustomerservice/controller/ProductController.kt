@@ -68,8 +68,26 @@ class ProductController(private val productRepository: ProductRepository) {
             id,
             form.title,
             form.handle
-        )                   // save to DB
-        model.addAttribute("products", productRepository.findAll(10))
+        )
+
+        // fetch paged data
+        val paged = productRepository.findPage(page = 0, size = 10)
+
+        // Add attributes expected by the Thymeleaf fragment
+        // `page` object used in the template (page.number, page.totalPages, page.size, page.totalElements, page.content)
+        model.addAttribute(
+            "page", mapOf(
+                "content" to paged.content,
+                "number" to paged.page,
+                "totalPages" to paged.totalPages,
+                "size" to paged.size,
+                "totalElements" to paged.totalElements
+            )
+        )
+
+        // Add `products` as a convenience/backwards-compatibility (template also checks products)
+        // save to DB
+        model.addAttribute("products", paged.content)
         // return the fragment that contains ONLY the table (so HTMX swaps it in)
         return "products :: table"
     }
@@ -100,12 +118,17 @@ class ProductController(private val productRepository: ProductRepository) {
     @PutMapping("/products/{id}")
     fun updateProduct(
         @PathVariable id: Long,
-        @ModelAttribute product: Product
+        @ModelAttribute product: Product,
+        model: Model
     ): String {
         logger.info("Updating product with id: {}", id)
         productRepository.upsertProduct(id, product.title, product.handle)
+        val updated = productRepository.findById(id)
+        model.addAttribute("product", updated)
+        model.addAttribute("message", "Product updated successfully!")
         logger.info("Product id {} updated successfully", id)
-        return "redirect:/products"
+        // IMPORTANT: return this file's fragment so OOB can replace #success-message here
+        return "product_detail :: productUpdated"
     }
 
     @DeleteMapping("/products/{id}")

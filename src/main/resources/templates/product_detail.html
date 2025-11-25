@@ -11,11 +11,10 @@
     <!-- Global Admin CSS -->
     <link rel="stylesheet" th:href="@{/admin_styles.css}">
 </head>
+
 <body>
 <div class="layout">
-    <aside class="sidebar"
-           th:replace="common/sidebar :: sidebar">
-    </aside>
+    <aside class="sidebar" th:replace="common/sidebar :: sidebar"></aside>
 
     <div class="content-wrap">
         <div class="topbar">
@@ -26,16 +25,15 @@
         <main class="page">
             <div class="card">
 
-                <!-- BEGIN original form content (wrapped) -->
+                <!-- UPDATE PRODUCT FORM -->
                 <div style="margin-bottom:16px; padding:16px; border:1px solid #ddd; border-radius:6px;">
                     <h2 style="margin-bottom:16px;">Update Product</h2>
 
-                    <form
-                            th:action="@{/products/{id}(id=${product.id})}"
-                            th:attr="hx-put=@{/products/{id}(id=${product.id})}"
-                            method="post"
-                            hx-target="#update-result"
-                            hx-swap="innerHTML">
+                    <form th:action="@{/products/{id}(id=${product.id})}"
+                          th:attr="hx-put=@{/products/{id}(id=${product.id})}"
+                          method="post"
+                          hx-target="#update-result"
+                          hx-swap="innerHTML">
 
                         <!-- Title -->
                         <div style="margin-bottom:12px;">
@@ -44,7 +42,7 @@
                                    name="title"
                                    th:value="${product.title}"
                                    required
-                                   style="width:260px; padding:6px; border-radius:4px; border:1px solid #ccc;">
+                                   style="width:360px; max-width:100%; padding:8px; border-radius:4px; border:1px solid #ccc;">
                         </div>
 
                         <!-- Handle -->
@@ -53,24 +51,25 @@
                             <input type="text"
                                    name="handle"
                                    th:value="${product.handle}"
-                                   style="width:260px; padding:6px; border-radius:4px; border:1px solid #ccc;">
+                                   style="width:360px; max-width:100%; padding:8px; border-radius:4px; border:1px solid #ccc;">
                         </div>
 
                         <!-- Buttons -->
                         <div style="margin-top:16px;">
                             <button type="submit"
-                                    style="padding:6px 14px; border:none; background:#28a745; color:white; border-radius:4px; cursor:pointer;">
+                                    style="padding:8px 14px; border:none; background:#28a745; color:white; border-radius:4px; cursor:pointer;">
                                 Save
                             </button>
 
                             <button type="button"
                                     onclick="window.location.href='/products'"
-                                    style="padding:6px 14px; border:1px solid #ccc; background:#f8f9fa; color:#333; border-radius:4px; margin-left:8px; cursor:pointer;">
+                                    style="padding:8px 14px; border:1px solid #ccc; background:#f8f9fa; color:#333; border-radius:4px; margin-left:8px; cursor:pointer;">
                                 Back
                             </button>
                         </div>
                     </form>
 
+                    <!-- Inline update message (auto-hide after 3s) -->
                     <div id="update-result" style="margin-top:12px;"></div>
                 </div>
 
@@ -78,5 +77,43 @@
         </main>
     </div>
 </div>
+
+
+<!-- ========================================================= -->
+<!--  FRAGMENT: Returned by controller on successful update     -->
+<!-- ========================================================= -->
+<th:block th:fragment="productUpdated">
+
+    <!-- Inline update message -->
+    <div id="update-result" style="padding:8px 0;">
+        <div style="padding:10px; border-radius:4px; border:1px solid #e6e6e6; background:#fff;">
+            <div>
+                <p th:color="blue" style="margin:0; color:blue;">
+                    Product "<span th:text="${product.title}">Product Name</span>" has been updated.
+                </p>
+            </div>
+        </div>
+    </div>
+
+</th:block>
+
+
+<!-- ========================================================= -->
+<!--          AUTO-HIDE (success + inline result)               -->
+<!-- ========================================================= -->
+<script>
+    document.body.addEventListener("htmx:afterSwap", function () {
+
+        /* Auto-hide inline update result */
+        const updateResult = document.getElementById('update-result');
+        if (updateResult && updateResult.innerText.trim().length > 0) {
+            if (updateResult._hideTimer) clearTimeout(updateResult._hideTimer);
+            updateResult._hideTimer = setTimeout(() => {
+                updateResult.innerHTML = "";
+            }, 3000);
+        }
+    });
+</script>
+
 </body>
 </html>
