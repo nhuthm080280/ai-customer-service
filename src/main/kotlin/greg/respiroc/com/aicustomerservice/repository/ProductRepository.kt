@@ -20,17 +20,6 @@ class ProductRepository(private val jdbcTemplate: JdbcTemplate) {
         jdbcTemplate.update(upsertSql, id, title, handle)
     }
 
-    fun findAll(limit: Int = 100): List<Product> {
-        val sql = "SELECT id, title, handle FROM products ORDER BY created_on DESC LIMIT ?"
-        return jdbcTemplate.query(sql, arrayOf(limit)) { rs, _ ->
-            Product(
-                id = rs.getLong("id"),
-                title = rs.getString("title"),
-                handle = rs.getString("handle")
-            )
-        }
-    }
-
     // New: page-based query using LIMIT/OFFSET + count
     fun findPage(page: Int = 0, size: Int = 10): PagedResult<Product> {
         val sizeSafe = if (size <= 0) 10 else size
@@ -43,7 +32,7 @@ class ProductRepository(private val jdbcTemplate: JdbcTemplate) {
 
         // Get page content
         val sql = """
-            SELECT id, title, handle
+            SELECT *
             FROM products
             ORDER BY created_on DESC
             LIMIT ? OFFSET ?
@@ -54,7 +43,12 @@ class ProductRepository(private val jdbcTemplate: JdbcTemplate) {
             Product(
                 id = rs.getLong("id"),
                 title = rs.getString("title"),
-                handle = rs.getString("handle")
+                handle = rs.getString("handle"),
+                vendor = rs.getString("vendor"),
+                productType = rs.getString("product_type"),
+                publishedAt = rs.getTimestamp("published_at")?.toLocalDateTime(),
+                createdAt = rs.getTimestamp("created_at")?.toLocalDateTime(),
+                updatedAt = rs.getTimestamp("updated_at")?.toLocalDateTime(),
             )
         }
 
@@ -65,12 +59,17 @@ class ProductRepository(private val jdbcTemplate: JdbcTemplate) {
     // New: findById
     // ---------------------------
     fun findById(id: Long): Product? {
-        val sql = "SELECT id, title, handle FROM products WHERE id = ?"
+        val sql = "SELECT * FROM products WHERE id = ?"
         val list = jdbcTemplate.query(sql, arrayOf(id)) { rs, _ ->
             Product(
                 id = rs.getLong("id"),
                 title = rs.getString("title"),
-                handle = rs.getString("handle")
+                handle = rs.getString("handle"),
+                vendor = rs.getString("vendor"),
+                productType = rs.getString("product_type"),
+                publishedAt = rs.getTimestamp("published_at")?.toLocalDateTime(),
+                createdAt = rs.getTimestamp("created_at")?.toLocalDateTime(),
+                updatedAt = rs.getTimestamp("updated_at")?.toLocalDateTime(),
             )
         }
         return list.firstOrNull()
@@ -80,7 +79,7 @@ class ProductRepository(private val jdbcTemplate: JdbcTemplate) {
         if (title.isNullOrBlank()) return emptyList()
 
         val sql = """
-        SELECT id, title, handle
+        SELECT *
         FROM products
         WHERE title ILIKE ?
         ORDER BY created_on DESC
@@ -92,7 +91,12 @@ class ProductRepository(private val jdbcTemplate: JdbcTemplate) {
             Product(
                 id = rs.getLong("id"),
                 title = rs.getString("title"),
-                handle = rs.getString("handle")
+                handle = rs.getString("handle"),
+                vendor = rs.getString("vendor"),
+                productType = rs.getString("product_type"),
+                publishedAt = rs.getTimestamp("published_at")?.toLocalDateTime(),
+                createdAt = rs.getTimestamp("created_at")?.toLocalDateTime(),
+                updatedAt = rs.getTimestamp("updated_at")?.toLocalDateTime(),
             )
         }
     }
