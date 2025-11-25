@@ -9,15 +9,19 @@ import org.springframework.stereotype.Repository
 class ProductRepository(private val jdbcTemplate: JdbcTemplate) {
 
     private val upsertSql = """
-        INSERT INTO products (id, title, handle)
-        VALUES (?, ?, ?)
+        INSERT INTO products (id, title, handle, vendor, product_type)
+        VALUES (?, ?, ?, ?, ?)
         ON CONFLICT (id) DO UPDATE
         SET title = EXCLUDED.title,
-            handle = EXCLUDED.handle
+            handle = EXCLUDED.handle,
+            vendor = EXCLUDED.vendor,
+            product_type = EXCLUDED.product_type,
+            created_at = COALESCE(products.created_at, CURRENT_TIMESTAMP),
+            updated_at = CURRENT_TIMESTAMP
     """.trimIndent()
 
-    fun upsertProduct(id: Long, title: String?, handle: String?) {
-        jdbcTemplate.update(upsertSql, id, title, handle)
+    fun upsertProduct(id: Long, title: String?, handle: String?, vendor: String?, productType: String?) {
+        jdbcTemplate.update(upsertSql, id, title, handle, vendor, productType)
     }
 
     // New: page-based query using LIMIT/OFFSET + count
@@ -34,7 +38,7 @@ class ProductRepository(private val jdbcTemplate: JdbcTemplate) {
         val sql = """
             SELECT *
             FROM products
-            ORDER BY created_on DESC
+            ORDER BY created_at DESC
             LIMIT ? OFFSET ?
         """.trimIndent()
 
@@ -82,7 +86,7 @@ class ProductRepository(private val jdbcTemplate: JdbcTemplate) {
         SELECT *
         FROM products
         WHERE title ILIKE ?
-        ORDER BY created_on DESC
+        ORDER BY created_at DESC
         LIMIT ?
     """.trimIndent()
 
@@ -104,6 +108,32 @@ class ProductRepository(private val jdbcTemplate: JdbcTemplate) {
     fun delete(id: Long) {
         val sql = "DELETE FROM products WHERE id = ?"
         jdbcTemplate.update(sql, id)
+    }
+
+    private val syncData = """
+        INSERT INTO products (id, title, handle, vendor, product_type, published_at, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?::timestamptz, ?::timestamptz, ?::timestamptz)
+        ON CONFLICT (id) DO UPDATE
+        SET title = EXCLUDED.title,
+            handle = EXCLUDED.handle,
+            vendor = EXCLUDED.vendor,
+            product_type = EXCLUDED.product_type,
+            created_at = EXCLUDED.created_at,
+            updated_at = EXCLUDED.updated_at,
+            published_at = EXCLUDED.published_at
+    """.trimIndent()
+
+    fun syncProduct(
+        id: Long,
+        title: String?,
+        handle: String?,
+        vendor: String?,
+        productType: String?,
+        createdAt: String?,
+        updatedAt: String?,
+        publishedAt: String?
+    ) {
+        jdbcTemplate.update(syncData, id, title, handle, vendor, productType, createdAt, updatedAt, publishedAt)
     }
 
 }

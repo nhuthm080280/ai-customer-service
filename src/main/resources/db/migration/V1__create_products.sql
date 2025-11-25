@@ -13,14 +13,13 @@ CREATE TABLE products (
     handle            TEXT,
     body_html         TEXT,
     published_at      TIMESTAMPTZ,
-    created_at        TIMESTAMPTZ,
+    created_at        TIMESTAMPTZ DEFAULT now(),
     updated_at        TIMESTAMPTZ,
     vendor            TEXT,
     product_type      TEXT,
     tags              TEXT[],                 -- tags array (may be empty)
     options           JSONB,                  -- raw "options" structure (name, position, values)
-    raw_json          JSONB,                  -- store full original JSON for this product
-    created_on        TIMESTAMPTZ DEFAULT now()
+    raw_json          JSONB                  -- store full original JSON for this product
 );
 
 CREATE INDEX idx_products_title ON products (lower(title));
@@ -43,10 +42,9 @@ CREATE TABLE variants (
     grams             INTEGER,
     compare_at_price  NUMERIC(12,2),
     position          INTEGER,
-    created_at        TIMESTAMPTZ,
+    created_at        TIMESTAMPTZ DEFAULT now(),
     updated_at        TIMESTAMPTZ,
-    raw_json          JSONB,
-    created_on        TIMESTAMPTZ DEFAULT now()
+    raw_json          JSONB
 );
 
 CREATE INDEX idx_variants_product_id ON variants (product_id);
@@ -56,7 +54,7 @@ CREATE INDEX idx_variants_sku ON variants (sku);
 CREATE TABLE images (
     id           BIGINT PRIMARY KEY,        -- upstream image id
     product_id   BIGINT NOT NULL REFERENCES products(id) ON DELETE CASCADE,
-    created_at   TIMESTAMPTZ,
+    created_at   TIMESTAMPTZ DEFAULT now(),
     updated_at   TIMESTAMPTZ,
     position     INTEGER,
     src          TEXT,
@@ -64,8 +62,7 @@ CREATE TABLE images (
     width        INTEGER,
     height       INTEGER,
     variant_ids  BIGINT[],                  -- array of variant ids that reference this image
-    raw_json     JSONB,
-    created_on   TIMESTAMPTZ DEFAULT now()
+    raw_json     JSONB
 );
 
 CREATE INDEX idx_images_product_id ON images (product_id);

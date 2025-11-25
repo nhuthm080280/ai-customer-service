@@ -53,8 +53,12 @@ class ProductSyncService(
                 val id = idNode.asLong()
                 val title = productNode.get("title")?.asText()
                 val handle = productNode.get("handle")?.asText()
-
-                productRepository.upsertProduct(id, title, handle)
+                val vendor = productNode.get("vendor")?.asText()
+                val productType = productNode.get("product_type")?.asText()
+                val createAt = productNode.get("created_at")?.asText()
+                val publishedAt = productNode.get("published_at")?.asText()
+                val updatedAt = productNode.get("updated_at")?.asText()
+                productRepository.syncProduct(id, title, handle, vendor, productType, createAt, publishedAt, updatedAt)
                 count++
             }
 

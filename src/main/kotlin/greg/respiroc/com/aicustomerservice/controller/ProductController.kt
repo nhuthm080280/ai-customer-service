@@ -66,7 +66,9 @@ class ProductController(private val productRepository: ProductRepository) {
         productRepository.upsertProduct(
             id,
             form.title,
-            form.handle
+            form.handle,
+            form.vendor,
+            form.productType
         )
 
         // fetch paged data
@@ -121,7 +123,7 @@ class ProductController(private val productRepository: ProductRepository) {
         model: Model
     ): String {
         logger.info("Updating product with id: {}", id)
-        productRepository.upsertProduct(id, product.title, product.handle)
+        productRepository.upsertProduct(id, product.title, product.handle, product.vendor, product.productType)
         val updated = productRepository.findById(id)
         model.addAttribute("product", updated)
         logger.info("Product id {} updated successfully", id)

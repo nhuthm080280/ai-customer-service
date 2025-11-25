@@ -54,6 +54,23 @@
                                    style="width:360px; max-width:100%; padding:8px; border-radius:4px; border:1px solid #ccc;">
                         </div>
 
+                        <!-- Vendor -->
+                        <div style="margin-bottom:12px;">
+                            <label style="display:block; font-weight:600; margin-bottom:4px;">Vendor</label>
+                            <input type="text"
+                                   name="vendor"
+                                   th:value="${product.vendor}"
+                                   style="width:360px; max-width:100%; padding:8px; border-radius:4px; border:1px solid #ccc;">
+                        </div>
+
+                        <!-- Product Type -->
+                        <div style="margin-bottom:12px;">
+                            <label style="display:block; font-weight:600; margin-bottom:4px;">Product Type</label>
+                            <input type="text"
+                                   name="productType"
+                                   th:value="${product.productType}"
+                                   style="width:360px; max-width:100%; padding:8px; border-radius:4px; border:1px solid #ccc;">
+                        </div>
                         <!-- Buttons -->
                         <div style="margin-top:16px;">
                             <button type="submit"
