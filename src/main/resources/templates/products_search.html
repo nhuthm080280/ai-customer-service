@@ -11,12 +11,8 @@
 <body>
 
 <div class="layout">
-    <aside class="sidebar">
-        <div class="brand">Admin Panel</div>
-        <nav class="nav">
-            <a href="/" th:href="@{/}">Home</a>
-            <a href="/products" th:href="@{/products}">Products</a>
-        </nav>
+    <aside class="sidebar"
+           th:replace="common/sidebar :: sidebar">
     </aside>
 
     <div class="content-wrap">
