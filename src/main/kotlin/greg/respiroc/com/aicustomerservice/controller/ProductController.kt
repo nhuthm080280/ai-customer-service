@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.server.ResponseStatusException
+import kotlin.collections.mapOf
 
 @Controller
 class ProductController(private val productRepository: ProductRepository) {
@@ -28,10 +29,30 @@ class ProductController(private val productRepository: ProductRepository) {
     }
 
     @GetMapping("/products/list")
-    fun productsList(model: Model): String {
-        val products = productRepository.findAll(10) // limit shown to 50
-        model.addAttribute("products", products)
-        // return Thymeleaf fragment named "table" from products.html
+    fun productsList(
+        @RequestParam(name = "page", defaultValue = "0") page: Int,
+        @RequestParam(name = "size", defaultValue = "10") size: Int,
+        model: Model
+    ): String {
+        // fetch paged data
+        val paged = productRepository.findPage(page = page, size = size)
+
+        // Add attributes expected by the Thymeleaf fragment
+        // `page` object used in the template (page.number, page.totalPages, page.size, page.totalElements, page.content)
+        model.addAttribute(
+            "page", mapOf(
+                "content" to paged.content,
+                "number" to paged.page,
+                "totalPages" to paged.totalPages,
+                "size" to paged.size,
+                "totalElements" to paged.totalElements
+            )
+        )
+
+        // Add `products` as a convenience/backwards-compatibility (template also checks products)
+        model.addAttribute("products", paged.content)
+
+        // Return fragment only so HTMX can swap it into #products-table
         return "products :: table"
     }
 

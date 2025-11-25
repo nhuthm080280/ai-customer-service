@@ -32,7 +32,8 @@
             <div class="card">
                 <!-- Controls -->
                 <div class="controls">
-                    <button hx-get="/products/list" hx-target="#products-table" hx-swap="outerHTML" id="load-btn">Load products</button>
+                    <!-- load first page explicitly -->
+                    <button hx-get="/products/list?page=0" hx-target="#products-table" hx-swap="outerHTML" id="load-btn">Load products</button>
                     <button type="button" onclick="window.location.href='/products/search'">Search</button>
                 </div>
 
@@ -43,65 +44,151 @@
 
                 <!-- HTMX fragment (server returns this fragment) -->
                 <div th:fragment="table">
-                    <div id="products-table">
-                        <div th:if="${products != null and not #lists.isEmpty(products)}">
+                    <!-- Use th:with to normalise whether server returned a Page or a List.
+                         If 'page' exists we use page.content as products and expose pagination metadata.
+                         Otherwise we fallback to plain 'products' (no pagination) -->
+                    <div th:with="realProducts=${page != null} ? ${page.content} : ${products},
+                                  hasPage=${page != null},
+                                  pageNum=${page != null} ? ${page.number} : 0,
+                                  totalPages=${page != null} ? ${page.totalPages} : 0,
+                                  pageSize=${page != null} ? ${page.size} : 0,
+                                  totalElements=${page != null} ? ${page.totalElements} : 0">
+                        <div id="products-table">
+                            <div th:if="${realProducts != null and not #lists.isEmpty(realProducts)}">
 
-                            <!-- Add form above table -->
-                            <div style="margin-bottom:12px;">
-                                <form id="add-product-form"
-                                      th:action="@{/products}"
-                                      method="post"
-                                      hx-post="/products"
-                                      hx-target="#products-table"
-                                      hx-swap="outerHTML">
-                                    <label>Title:
-                                        <input type="text" name="title" required/>
-                                    </label>
-                                    <label style="margin-left:12px;">Handle:
-                                        <input type="text" name="handle"/>
-                                    </label>
-                                    <button type="submit" style="margin-left:12px;">Add Product</button>
-                                </form>
+                                <!-- Add form above table -->
+                                <div style="margin-bottom:12px;">
+                                    <form id="add-product-form"
+                                          th:action="@{/products}"
+                                          method="post"
+                                          hx-post="/products"
+                                          hx-target="#products-table"
+                                          hx-swap="outerHTML">
+                                        <label>Title:
+                                            <input type="text" name="title" required/>
+                                        </label>
+                                        <label style="margin-left:12px;">Handle:
+                                            <input type="text" name="handle"/>
+                                        </label>
+                                        <button type="submit" style="margin-left:12px;">Add Product</button>
+                                    </form>
+                                </div>
+
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th style="width:140px">ID</th>
+                                        <th>Title</th>
+                                        <th>Handle</th>
+                                        <th style="width:200px">Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="p : ${realProducts}" th:id="'row-' + ${p.id}">
+                                        <td th:text="${p.id}"></td>
+                                        <td th:text="${p.title}"></td>
+                                        <td th:text="${p.handle}"></td>
+                                        <td>
+                                            <!-- Update as button -->
+                                            <button type="button"
+                                                    th:onclick="'window.location.href=\'/products/' + ${p.id} + '\';'">
+                                                Update
+                                            </button>
+
+                                            <!-- Delete opens dialog -->
+                                            <button type="button"
+                                                    style="margin-left:8px;background:#ef4444"
+                                                    class="delete-btn"
+                                                    th:attr="data-id=${p.id}, data-title=${p.title}"
+                                                    onclick="openDeleteDialog(this)">
+                                                Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <!-- PAGINATION (only shown when server returned a Page) -->
+                                <div class="pagination" style="margin-top:12px;" th:if="${hasPage}">
+                                    <div class="pagination-info" style="margin-bottom:6px;">
+                                        <span class="muted">
+                                            Showing page <strong th:text="${pageNum + 1}">1</strong>
+                                            of <strong th:text="${totalPages}">1</strong>
+                                            — <span th:text="${totalElements}">0</span> products
+                                        </span>
+                                    </div>
+
+                                    <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+                                        <!-- Previous -->
+                                        <button
+                                                th:attr="hx-get=@{|/products/list?page=${pageNum - 1}|}"
+                                                hx-target="#products-table"
+                                                hx-swap="outerHTML"
+                                                th:disabled="${pageNum == 0}"
+                                                th:classappend="${pageNum == 0} ? 'disabled'">
+                                            ← Previous
+                                        </button>
+
+                                        <!-- First page shortcut -->
+                                        <button
+                                                th:if="${pageNum > 2}"
+                                                th:attr="hx-get=@{|/products/list?page=0|}"
+                                                hx-target="#products-table"
+                                                hx-swap="outerHTML">
+                                            1
+                                        </button>
+
+                                        <span th:if="${pageNum > 3}">…</span>
+
+                                        <!-- Page window: show current-1, current, current+1 -->
+                                        <button
+                                                th:each="i : ${#numbers.sequence((pageNum - 1) >= 0 ? pageNum -1 : 0, (pageNum + 1) < totalPages ? pageNum + 1 : totalPages -1)}"
+                                                th:text="${i + 1}"
+                                                th:attr="hx-get=@{|/products/list?page=${i}|}"
+                                                hx-target="#products-table"
+                                                hx-swap="outerHTML"
+                                                th:classappend="${i == pageNum} ? 'active'">
+                                        </button>
+
+                                        <span th:if="${pageNum < totalPages - 4}">…</span>
+
+                                        <!-- Last page shortcut -->
+                                        <button
+                                                th:if="${pageNum < totalPages - 2}"
+                                                th:attr="hx-get=@{|/products/list?page=${totalPages - 1}|}"
+                                                hx-target="#products-table"
+                                                hx-swap="outerHTML">
+                                            <span th:text="${totalPages}">N</span>
+                                        </button>
+
+                                        <!-- Next -->
+                                        <button
+                                                th:attr="hx-get=@{|/products/list?page=${pageNum + 1}|}"
+                                                hx-target="#products-table"
+                                                hx-swap="outerHTML"
+                                                th:disabled="${pageNum + 1 >= totalPages}"
+                                                th:classappend="${pageNum + 1 >= totalPages} ? 'disabled'">
+                                            Next →
+                                        </button>
+
+                                        <!-- Optional: Quick jump to page (works via hx-get) -->
+                                        <label style="margin-left:12px;">
+                                            Jump:
+                                            <input type="number" min="1" th:attr="max=${totalPages}" id="jumpPageInput" style="width:70px">
+                                        </label>
+                                        <button type="button" onclick="jumpToPage()">Go</button>
+                                    </div>
+                                </div>
+
                             </div>
 
-                            <table>
-                                <thead>
-                                <tr>
-                                    <th style="width:140px">ID</th>
-                                    <th>Title</th>
-                                    <th>Handle</th>
-                                    <th style="width:200px">Actions</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="p : ${products}" th:id="'row-' + ${p.id}">
-                                    <td th:text="${p.id}"></td>
-                                    <td th:text="${p.title}"></td>
-                                    <td th:text="${p.handle}"></td>
-                                    <td>
-                                        <!-- Update as button -->
-                                        <button type="button"
-                                                th:onclick="'window.location.href=\'/products/' + ${p.id} + '\';'">
-                                            Update
-                                        </button>
-
-                                        <!-- Delete opens dialog -->
-                                        <button type="button"
-                                                style="margin-left:8px;background:#ef4444"
-                                                class="delete-btn"
-                                                th:attr="data-id=${p.id}, data-title=${p.title}"
-                                                onclick="openDeleteDialog(this)">
-                                            Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-
+                            <!-- If realProducts is empty ⇒ show placeholder -->
+                            <div th:if="${realProducts != null and #lists.isEmpty(realProducts)}">
+                                <div style="padding:16px;">
+                                    <p class="muted">No products available.</p>
+                                </div>
+                            </div>
                         </div>
-
-                        <!-- If products is empty ⇒ return empty (server fragment can return nothing) -->
-                        <div th:if="${products != null and #lists.isEmpty(products)}"></div>
                     </div>
                 </div>
                 <!-- /fragment -->
@@ -208,6 +295,23 @@
     });
 
     document.addEventListener('DOMContentLoaded', function() { checkEmptyTable(); });
+
+    // Jump to page handler uses HTMX to request the target page
+    function jumpToPage() {
+        const input = document.getElementById('jumpPageInput');
+        if (!input) return;
+        let v = parseInt(input.value, 10);
+        if (!v || v < 1) return;
+        // pages in server are 0-based
+        const page = v - 1;
+        // Request with hx via JS (so we can construct URL)
+        if (window.htmx) {
+            htmx.ajax('GET', `/products/list?page=${page}`, { target: '#products-table', swap: 'outerHTML' });
+        } else {
+            // fallback: location
+            window.location.href = `/products/list?page=${page}`;
+        }
+    }
 </script>
 
 </body>

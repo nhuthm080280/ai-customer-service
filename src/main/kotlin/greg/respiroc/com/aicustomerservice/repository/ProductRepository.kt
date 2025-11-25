@@ -1,5 +1,6 @@
 package greg.respiroc.com.aicustomerservice.repository
 
+import greg.respiroc.com.aicustomerservice.model.PagedResult
 import greg.respiroc.com.aicustomerservice.model.Product
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
@@ -28,6 +29,36 @@ class ProductRepository(private val jdbcTemplate: JdbcTemplate) {
                 handle = rs.getString("handle")
             )
         }
+    }
+
+    // New: page-based query using LIMIT/OFFSET + count
+    fun findPage(page: Int = 0, size: Int = 10): PagedResult<Product> {
+        val sizeSafe = if (size <= 0) 10 else size
+        val pageSafe = if (page < 0) 0 else page
+        val offset = pageSafe.toLong() * sizeSafe.toLong()
+
+        // Count total rows
+        val countSql = "SELECT COUNT(*) FROM products"
+        val totalElements = jdbcTemplate.queryForObject(countSql, Long::class.java) ?: 0L
+
+        // Get page content
+        val sql = """
+            SELECT id, title, handle
+            FROM products
+            ORDER BY created_on DESC
+            LIMIT ? OFFSET ?
+        """.trimIndent()
+
+        // Use proper parameter types: size then offset
+        val content = jdbcTemplate.query(sql, arrayOf(sizeSafe, offset)) { rs, _ ->
+            Product(
+                id = rs.getLong("id"),
+                title = rs.getString("title"),
+                handle = rs.getString("handle")
+            )
+        }
+
+        return PagedResult(content = content, totalElements = totalElements, page = pageSafe, size = sizeSafe)
     }
 
     // ---------------------------
