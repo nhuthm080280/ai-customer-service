@@ -27,32 +27,52 @@
             <div class="card">
 
                 <!-- BEGIN original form content (wrapped) -->
-                <h1>Update Product</h1>
+                <div style="margin-bottom:16px; padding:16px; border:1px solid #ddd; border-radius:6px;">
+                    <h2 style="margin-bottom:16px;">Update Product</h2>
 
-                <form
-                        th:action="@{/products/{id}(id=${product.id})}"
-                        th:attr="hx-put=@{/products/{id}(id=${product.id})}"
-                        method="post"
-                        hx-target="#update-result"
-                        hx-swap="innerHTML">
+                    <form
+                            th:action="@{/products/{id}(id=${product.id})}"
+                            th:attr="hx-put=@{/products/{id}(id=${product.id})}"
+                            method="post"
+                            hx-target="#update-result"
+                            hx-swap="innerHTML">
 
-                    <label>
-                        Title:
-                        <input type="text" name="title" th:value="${product.title}" required>
-                    </label>
+                        <!-- Title -->
+                        <div style="margin-bottom:12px;">
+                            <label style="display:block; font-weight:600; margin-bottom:4px;">Title</label>
+                            <input type="text"
+                                   name="title"
+                                   th:value="${product.title}"
+                                   required
+                                   style="width:260px; padding:6px; border-radius:4px; border:1px solid #ccc;">
+                        </div>
 
-                    <label>
-                        Handle:
-                        <input type="text" name="handle" th:value="${product.handle}">
-                    </label>
+                        <!-- Handle -->
+                        <div style="margin-bottom:12px;">
+                            <label style="display:block; font-weight:600; margin-bottom:4px;">Handle</label>
+                            <input type="text"
+                                   name="handle"
+                                   th:value="${product.handle}"
+                                   style="width:260px; padding:6px; border-radius:4px; border:1px solid #ccc;">
+                        </div>
 
-                    <button type="submit">Save</button>
-                    <button type="button" onclick="window.location.href='/products'">Back</button>
-                    <!-- END original form content -->
-                </form>
+                        <!-- Buttons -->
+                        <div style="margin-top:16px;">
+                            <button type="submit"
+                                    style="padding:6px 14px; border:none; background:#28a745; color:white; border-radius:4px; cursor:pointer;">
+                                Save
+                            </button>
 
-                <div id="update-result"></div>
+                            <button type="button"
+                                    onclick="window.location.href='/products'"
+                                    style="padding:6px 14px; border:1px solid #ccc; background:#f8f9fa; color:#333; border-radius:4px; margin-left:8px; cursor:pointer;">
+                                Back
+                            </button>
+                        </div>
+                    </form>
 
+                    <div id="update-result" style="margin-top:12px;"></div>
+                </div>
 
             </div>
         </main>
