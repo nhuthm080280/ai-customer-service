@@ -2,7 +2,6 @@ package greg.respiroc.com.aicustomerservice.controller
 
 import greg.respiroc.com.aicustomerservice.model.Product
 import greg.respiroc.com.aicustomerservice.repository.ProductRepository
-import greg.respiroc.com.aicustomerservice.service.ProductSyncService
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -125,7 +124,6 @@ class ProductController(private val productRepository: ProductRepository) {
         productRepository.upsertProduct(id, product.title, product.handle)
         val updated = productRepository.findById(id)
         model.addAttribute("product", updated)
-        model.addAttribute("message", "Product updated successfully!")
         logger.info("Product id {} updated successfully", id)
         // IMPORTANT: return this file's fragment so OOB can replace #success-message here
         return "product_detail :: productUpdated"
