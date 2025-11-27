@@ -89,20 +89,20 @@
                                     <td th:text="${#temporals.format(p.createdAt, 'yyyy-MM-dd HH:mm')}">—</td>
                                     <td th:text="${#temporals.format(p.updatedAt, 'yyyy-MM-dd HH:mm')}">—</td>
                                     <td>
-                                        <wa-button type="button" variant="success"
+                                        <wa-button type="button" variant="success" size="small"
                                                    th:onclick="'window.location.href=\'/products/' + ${p.id} + '\';'">
-                                            Update
+                                            <wa-icon name="pencil"></wa-icon>
                                         </wa-button>
 
                                     </td>
                                     <td>
                                         <!-- Delete opens dialog -->
-                                        <wa-button type="button" variant="danger"
+                                        <wa-button type="button" variant="danger" size="small"
                                                    style="margin-left:8px;background:#ef4444"
                                                    class="delete-btn"
                                                    th:attr="data-id=${p.id}, data-title=${p.title}"
                                                    onclick="openDeleteDialog(this)">
-                                            Delete
+                                            <wa-icon name="trash"></wa-icon>
                                         </wa-button>
                                     </td>
                                 </tr>
