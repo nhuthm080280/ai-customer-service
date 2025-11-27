@@ -8,9 +8,14 @@
     <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.2"></script>
 
-    <!-- (optional) WebAwesome — remove if you don't use it -->
-    <script type="module" src="https://esm.run/@webawesome/components"></script>
-    <link rel="stylesheet" href="https://esm.run/@webawesome/components/dist/webawesome/webawesome.css">
+    <!-- ✅ Web Awesome Theme (includes Design Tokens) -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.0.0/dist-cdn/styles/themes/default.css">
+
+    <!-- ✅ Web Awesome Components Loader -->
+    <script type="module"
+            src="https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.0.0/dist-cdn/webawesome.loader.js">
+    </script>
 
     <!-- Global Admin CSS -->
     <link rel="stylesheet" th:href="@{/admin_styles.css}">
@@ -27,14 +32,16 @@
             <div><strong>Products</strong></div>
             <div class="muted">Admin</div>
         </div>
-
         <main class="page">
             <div class="card">
                 <!-- Controls -->
                 <div class="controls">
                     <!-- load first page explicitly -->
-                    <button hx-get="/products/list?page=0" hx-target="#products-table" hx-swap="outerHTML" id="load-btn">Load products</button>
-                    <button type="button" onclick="window.location.href='/products/search'">Search</button>
+                    <wa-button id="load-btn"
+                               onclick="htmx.ajax('GET','/products/list?page=0',{target:'#products-table',swap:'outerHTML'})">
+                        Load products
+                    </wa-button>
+                    <wa-button onclick="window.location.href='/products/search'">Search</wa-button>
                 </div>
 
                 <!-- Table container -->
@@ -89,7 +96,8 @@
 
                                         <!-- Handle -->
                                         <div style="margin-bottom:12px;">
-                                            <label style="display:block; font-weight:600; margin-bottom:4px;">Product Type</label>
+                                            <label style="display:block; font-weight:600; margin-bottom:4px;">Product
+                                                Type</label>
                                             <input type="text" name="productType"
                                                    style="width:250px; padding:6px; border-radius:4px; border:1px solid #ccc;">
                                         </div>
@@ -112,10 +120,11 @@
                                         <th>Handle</th>
                                         <th>Vendor</th>
                                         <th>Product Type</th>
-                                        <th style="width:100px">Published At</th>
-                                        <th style="width:100px">Created At</th>
-                                        <th style="width:100px">Updated At</th>
-                                        <th style="width:200px">Actions</th>
+                                        <th>Published At</th>
+                                        <th>Created At</th>
+                                        <th>Updated At</th>
+                                        <th></th>
+                                        <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -132,20 +141,21 @@
                                         <td th:text="${#temporals.format(p.updatedAt, 'yyyy-MM-dd HH:mm')}">—</td>
 
                                         <td>
-                                            <!-- Update as button -->
-                                            <button type="button"
+                                            <wa-button type="button" variant="success"
                                                     th:onclick="'window.location.href=\'/products/' + ${p.id} + '\';'">
                                                 Update
-                                            </button>
+                                            </wa-button>
 
+                                        </td>
+                                        <td>
                                             <!-- Delete opens dialog -->
-                                            <button type="button"
+                                            <wa-button type="button" variant="danger"
                                                     style="margin-left:8px;background:#ef4444"
                                                     class="delete-btn"
                                                     th:attr="data-id=${p.id}, data-title=${p.title}"
                                                     onclick="openDeleteDialog(this)">
                                                 Delete
-                                            </button>
+                                            </wa-button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -217,7 +227,8 @@
                                         <!-- Optional: Quick jump to page (works via hx-get) -->
                                         <label style="margin-left:12px;">
                                             Jump:
-                                            <input type="number" min="1" th:attr="max=${totalPages}" id="jumpPageInput" style="width:70px">
+                                            <input type="number" min="1" th:attr="max=${totalPages}" id="jumpPageInput"
+                                                   style="width:70px">
                                         </label>
                                         <button type="button" onclick="jumpToPage()">Go</button>
                                     </div>
@@ -241,19 +252,19 @@
     </div>
 </div>
 
-<!-- Delete confirmation dialog -->
+<!-- Delete confirmation dialog (kept existing functionality) -->
 <dialog id="confirmDeleteDialog">
     <h3>Confirm Delete</h3>
     <p id="confirmDeleteMsg">Are you sure you want to delete this?</p>
     <div style="margin-top:12px;">
-        <button type="button" onclick="closeDeleteDialog()">Cancel</button>
-        <button id="confirmDeleteBtn" type="button" style="background:#ef4444">Delete</button>
+        <wa-button onclick="closeDeleteDialog()">Cancel</wa-button>
+        <wa-button id="confirmDeleteBtn" variant="danger">Delete</wa-button>
     </div>
 </dialog>
 
 <script>
     // Reset add product form after table is swapped in
-    document.body.addEventListener('htmx:afterSwap', function(evt) {
+    document.body.addEventListener('htmx:afterSwap', function (evt) {
         const target = evt.detail && evt.detail.target;
         if (target && target.id === 'products-table') {
             const form = document.getElementById('add-product-form');
@@ -276,7 +287,12 @@
 
     function closeDeleteDialog() {
         const dialog = document.getElementById('confirmDeleteDialog');
-        if (dialog) { try { dialog.close(); } catch(e) {} }
+        if (dialog) {
+            try {
+                dialog.close();
+            } catch (e) {
+            }
+        }
     }
 
     function checkEmptyTable() {
@@ -306,25 +322,28 @@
     }
 
     // Delete confirm handler: prefer HTMX, fallback to fetch()
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         const el = e.target;
         if (!el || el.id !== 'confirmDeleteBtn') return;
 
-        e.preventDefault(); e.stopPropagation();
+        e.preventDefault();
+        e.stopPropagation();
         const id = el.getAttribute('data-delete-id');
         if (!id) return;
         const url = `/products/${id}`;
         const rowSelector = `#row-${id}`;
 
         if (window.htmx && typeof htmx.ajax === 'function') {
-            htmx.ajax('DELETE', url, { target: rowSelector, swap: 'outerHTML' });
+            htmx.ajax('DELETE', url, {target: rowSelector, swap: 'outerHTML'});
             setTimeout(() => closeDeleteDialog(), 200);
-            setTimeout(() => { setTimeout(checkEmptyTable, 200); }, 300);
+            setTimeout(() => {
+                setTimeout(checkEmptyTable, 200);
+            }, 300);
             return;
         }
 
         // fallback
-        fetch(url, { method: 'DELETE', credentials: 'same-origin' })
+        fetch(url, {method: 'DELETE', credentials: 'same-origin'})
             .then(r => {
                 if (r.ok) {
                     document.querySelector(rowSelector)?.remove();
@@ -337,7 +356,9 @@
             .catch(err => alert('Delete error: ' + err));
     });
 
-    document.addEventListener('DOMContentLoaded', function() { checkEmptyTable(); });
+    document.addEventListener('DOMContentLoaded', function () {
+        checkEmptyTable();
+    });
 
     // Jump to page handler uses HTMX to request the target page
     function jumpToPage() {
@@ -349,7 +370,7 @@
         const page = v - 1;
         // Request with hx via JS (so we can construct URL)
         if (window.htmx) {
-            htmx.ajax('GET', `/products/list?page=${page}`, { target: '#products-table', swap: 'outerHTML' });
+            htmx.ajax('GET', `/products/list?page=${page}`, {target: '#products-table', swap: 'outerHTML'});
         } else {
             // fallback: location
             window.location.href = `/products/list?page=${page}`;

@@ -4,14 +4,26 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <title>Admin - Home</title>
+
+    <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+
+    <!-- ✅ Web Awesome Theme (includes Design Tokens) -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.0.0/dist-cdn/styles/themes/default.css">
+
+    <!-- ✅ Web Awesome Components Loader -->
+    <script type="module"
+            src="https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.0.0/dist-cdn/webawesome.loader.js">
+    </script>
+
     <!-- Global Admin CSS -->
     <link rel="stylesheet" th:href="@{/admin_styles.css}">
 </head>
 <body>
 <div class="layout">
     <aside class="sidebar"
-         th:replace="common/sidebar :: sidebar">
+           th:replace="common/sidebar :: sidebar">
     </aside>
 
     <div class="content-wrap">
@@ -24,6 +36,11 @@
             <div class="card">
                 <h1>Welcome</h1>
                 <p>This is the home page.</p>
+
+                <!-- Example WebAwesome card/button -->
+                <div style="margin-top:12px;">
+                    <wa-button variant="primary" onclick="window.location.href='/products'">Go to Products</wa-button>
+                </div>
             </div>
         </main>
     </div>

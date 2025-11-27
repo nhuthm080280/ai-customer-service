@@ -8,6 +8,15 @@
     <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.2"></script>
 
+    <!-- ✅ Web Awesome Theme (includes Design Tokens) -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.0.0/dist-cdn/styles/themes/default.css">
+
+    <!-- ✅ Web Awesome Components Loader -->
+    <script type="module"
+            src="https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.0.0/dist-cdn/webawesome.loader.js">
+    </script>
+
     <!-- Global Admin CSS -->
     <link rel="stylesheet" th:href="@{/admin_styles.css}">
 </head>
@@ -73,16 +82,8 @@
                         </div>
                         <!-- Buttons -->
                         <div style="margin-top:16px;">
-                            <button type="submit"
-                                    style="padding:8px 14px; border:none; background:#28a745; color:white; border-radius:4px; cursor:pointer;">
-                                Save
-                            </button>
-
-                            <button type="button"
-                                    onclick="window.location.href='/products'"
-                                    style="padding:8px 14px; border:1px solid #ccc; background:#f8f9fa; color:#333; border-radius:4px; margin-left:8px; cursor:pointer;">
-                                Back
-                            </button>
+                            <wa-button type="submit" variant="success">Save</wa-button>
+                            <wa-button type="button" onclick="window.location.href='/products'">Back</wa-button>
                         </div>
                     </form>
 
@@ -95,13 +96,8 @@
     </div>
 </div>
 
-
-<!-- ========================================================= -->
-<!--  FRAGMENT: Returned by controller on successful update     -->
-<!-- ========================================================= -->
+<!-- fragment productUpdated kept -->
 <th:block th:fragment="productUpdated">
-
-    <!-- Inline update message -->
     <div id="update-result" style="padding:8px 0;">
         <div style="padding:10px; border-radius:4px; border:1px solid #e6e6e6; background:#fff;">
             <div>
@@ -111,17 +107,10 @@
             </div>
         </div>
     </div>
-
 </th:block>
 
-
-<!-- ========================================================= -->
-<!--          AUTO-HIDE (success + inline result)               -->
-<!-- ========================================================= -->
 <script>
     document.body.addEventListener("htmx:afterSwap", function () {
-
-        /* Auto-hide inline update result */
         const updateResult = document.getElementById('update-result');
         if (updateResult && updateResult.innerText.trim().length > 0) {
             if (updateResult._hideTimer) clearTimeout(updateResult._hideTimer);
