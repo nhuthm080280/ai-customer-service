@@ -33,14 +33,21 @@
         </div>
 
         <main class="page">
-            <div class="card">
-                <h1>Welcome</h1>
-                <p>This is the home page.</p>
+            <div class="wa-grid wa-gap-m" style="--min-column-size: 20ch;">
+                <!-- Main welcome card (uses WebAwesome card component) -->
+                <wa-card style="min-width:16rem; max-width:48rem;">
+                    <h2 slot="title">Welcome</h2>
 
-                <!-- Example WebAwesome card/button -->
-                <div style="margin-top:12px;">
-                    <wa-button variant="primary" onclick="window.location.href='/products'">Go to Products</wa-button>
-                </div>
+                    <div class="wa-stack" style="gap:0.5rem;">
+                        <p>This is the home page.</p>
+
+                        <div style="margin-top:12px;">
+                            <wa-button variant="primary" onclick="window.location.href='/products'">
+                                Go to Products
+                            </wa-button>
+                        </div>
+                    </div>
+                </wa-card>
             </div>
         </main>
     </div>

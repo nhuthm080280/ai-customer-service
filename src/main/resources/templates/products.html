@@ -19,6 +19,82 @@
 
     <!-- Global Admin CSS -->
     <link rel="stylesheet" th:href="@{/admin_styles.css}">
+    <style>
+        /* ------------------------------------------------------------
+   WebAwesome-style responsive table
+   ------------------------------------------------------------ */
+
+        /* Wrapper: adds horizontal scroll on small screens */
+        .wa-table-wrapper {
+            overflow-x: auto;
+            width: 100%;
+            /* smooth scroll bar */
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 1rem;
+        }
+
+        /* Base table styling */
+        .wa-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            font-size: 14px;
+        }
+
+        .wa-table thead {
+            background: #f8f9fc;
+        }
+
+        .wa-table th,
+        .wa-table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+            white-space: nowrap; /* keep cells tidy on desktop */
+        }
+
+        .wa-table th {
+            font-size: 13px;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        .wa-table tbody tr:hover {
+            background: #f5f7ff;
+        }
+
+        /* Responsive: stack cells on narrow screens */
+        @media (max-width: 700px) {
+            .wa-table {
+                border: 0;
+            }
+            .wa-table thead {
+                display: none; /* hide header */
+            }
+            .wa-table tr {
+                display: block;
+                margin-bottom: 12px;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                padding: 8px;
+            }
+            .wa-table td {
+                display: flex;
+                justify-content: space-between;
+                padding: 8px 6px;
+                border-bottom: none;
+                white-space: normal; /* allow wrap on mobile */
+            }
+            .wa-table td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: #374151;
+                margin-right: 8px;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -103,10 +179,7 @@
                                         </div>
 
                                         <!-- Submit -->
-                                        <button type="submit"
-                                                style="padding:6px 14px; border:none; background:#007bff; color:white; border-radius:4px; cursor:pointer;">
-                                            Add Product
-                                        </button>
+                                        <wa-button type="submit" variant="neutral">Add Product</wa-button>
                                     </form>
 
                                 </div>

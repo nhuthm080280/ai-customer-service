@@ -8,7 +8,17 @@
 
     <!-- optional WebAwesome quick actions -->
     <div style="margin-top:12px; padding:8px;">
-        <wa-button variant="ghost" onclick="window.location.href='/products/search'">Search</wa-button>
-        <wa-button variant="ghost" onclick="window.location.href='/products'">Products</wa-button>
+        <wa-button variant="ghost"
+                   hx-get="/products/search"
+                   hx-push-url="true">
+            Search
+        </wa-button>
+
+        <wa-button variant="ghost"
+                   hx-get="/products"
+                   hx-push-url="true">
+            Products
+        </wa-button>
+
     </div>
 </aside>
