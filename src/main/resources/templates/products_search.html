@@ -60,8 +60,8 @@
                 <div th:fragment="searchResults">
                     <div id="search-results">
                         <!-- (unchanged table fragment content retained) -->
-                        <div th:if="${products != null and not #lists.isEmpty(products)}">
-                            <table>
+                        <div th:if="${products != null and not #lists.isEmpty(products)}" class="wa-table-wrapper">
+                            <table class="wa-table">
                                 <thead>
                                 <tr>
                                     <th>ID</th>

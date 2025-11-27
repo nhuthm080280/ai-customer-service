@@ -258,3 +258,84 @@ dialog {
 .form-grid { display:grid; grid-template-columns: repeat(1, minmax(0, 1fr)); gap:16px; align-items:start; }
 @media (max-width:900px){ .form-grid{ grid-template-columns: 1fr; } }
 .actions { display:flex; gap:8px; margin-top:12px; }
+
+/* ------------------------------------------------------------
+   Responsive Data Table (WebAwesome style)
+   ------------------------------------------------------------ */
+
+/* Wrapper: enables horizontal scroll on small screens */
+.wa-table-wrapper {
+    overflow-x: auto;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 1rem;
+}
+
+/* Base table */
+.wa-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 14px;
+}
+
+/* Header */
+.wa-table thead {
+    background: #f8f9fc;
+}
+.wa-table th {
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b7280;
+    padding: 12px 10px;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+}
+
+/* Cells */
+.wa-table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #f1f5f9;
+    white-space: nowrap;
+}
+
+/* Hover */
+.wa-table tbody tr:hover {
+    background: #f5f7ff;
+}
+
+/* Mobile responsive stack */
+@media (max-width: 700px) {
+    .wa-table {
+        border: 0;
+    }
+    .wa-table thead {
+        display: none; /* hide header on mobile */
+    }
+
+    .wa-table tr {
+        display: block;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        padding: 8px;
+    }
+
+    .wa-table td {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 6px;
+        border-bottom: none;
+        white-space: normal; /* allow wrap inside cards */
+    }
+
+    /* This is the magic: show column name */
+    .wa-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #374151;
+        margin-right: 10px;
+    }
+}
