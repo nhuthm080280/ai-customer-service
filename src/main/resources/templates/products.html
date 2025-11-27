@@ -19,82 +19,6 @@
 
     <!-- Global Admin CSS -->
     <link rel="stylesheet" th:href="@{/admin_styles.css}">
-    <style>
-        /* ------------------------------------------------------------
-   WebAwesome-style responsive table
-   ------------------------------------------------------------ */
-
-        /* Wrapper: adds horizontal scroll on small screens */
-        .wa-table-wrapper {
-            overflow-x: auto;
-            width: 100%;
-            /* smooth scroll bar */
-            -webkit-overflow-scrolling: touch;
-            margin-bottom: 1rem;
-        }
-
-        /* Base table styling */
-        .wa-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #fff;
-            border-radius: 10px;
-            overflow: hidden;
-            font-size: 14px;
-        }
-
-        .wa-table thead {
-            background: #f8f9fc;
-        }
-
-        .wa-table th,
-        .wa-table td {
-            padding: 12px 10px;
-            border-bottom: 1px solid #e5e7eb;
-            text-align: left;
-            white-space: nowrap; /* keep cells tidy on desktop */
-        }
-
-        .wa-table th {
-            font-size: 13px;
-            font-weight: 600;
-            color: #6b7280;
-        }
-
-        .wa-table tbody tr:hover {
-            background: #f5f7ff;
-        }
-
-        /* Responsive: stack cells on narrow screens */
-        @media (max-width: 700px) {
-            .wa-table {
-                border: 0;
-            }
-            .wa-table thead {
-                display: none; /* hide header */
-            }
-            .wa-table tr {
-                display: block;
-                margin-bottom: 12px;
-                border: 1px solid #e5e7eb;
-                border-radius: 8px;
-                padding: 8px;
-            }
-            .wa-table td {
-                display: flex;
-                justify-content: space-between;
-                padding: 8px 6px;
-                border-bottom: none;
-                white-space: normal; /* allow wrap on mobile */
-            }
-            .wa-table td::before {
-                content: attr(data-label);
-                font-weight: 600;
-                color: #374151;
-                margin-right: 8px;
-            }
-        }
-    </style>
 </head>
 <body>
 
@@ -136,54 +60,48 @@
                                   totalPages=${page != null} ? ${page.totalPages} : 0,
                                   pageSize=${page != null} ? ${page.size} : 0,
                                   totalElements=${page != null} ? ${page.totalElements} : 0">
+
                         <div id="products-table">
                             <div th:if="${realProducts != null and not #lists.isEmpty(realProducts)}">
+                                <wa-card style="max-width:900px;">
+                                    <!-- Add form above table -->
+                                    <div class="wa-stack" style="gap:16px;">
+                                        <form id="add-product-form"
+                                              th:action="@{/products}"
+                                              method="post"
+                                              hx-post="/products"
+                                              hx-target="#products-table"
+                                              hx-swap="outerHTML">
+                                            <div class="form-grid">
+                                                <div class="wa-field">
+                                                    <label for="title">Title</label>
+                                                    <input id="title" name="title" type="text" required />
+                                                </div>
 
-                                <!-- Add form above table -->
-                                <div style="margin-bottom:16px; padding:12px; border:1px solid #ddd; border-radius:6px;">
-                                    <form id="add-product-form"
-                                          th:action="@{/products}"
-                                          method="post"
-                                          hx-post="/products"
-                                          hx-target="#products-table"
-                                          hx-swap="outerHTML">
+                                                <div class="wa-field">
+                                                    <label for="handle">Handle</label>
+                                                    <input id="handle" name="handle" type="text" />
+                                                </div>
 
-                                        <!-- Title -->
-                                        <div style="margin-bottom:10px;">
-                                            <label style="display:block; font-weight:600; margin-bottom:4px;">Title</label>
-                                            <input type="text" name="title"
-                                                   required
-                                                   style="width:250px; padding:6px; border-radius:4px; border:1px solid #ccc;">
-                                        </div>
+                                                <div class="wa-field">
+                                                    <label for="vendor">Vendor</label>
+                                                    <input id="vendor" name="vendor" type="text" />
+                                                </div>
 
-                                        <!-- Handle -->
-                                        <div style="margin-bottom:12px;">
-                                            <label style="display:block; font-weight:600; margin-bottom:4px;">Handle</label>
-                                            <input type="text" name="handle"
-                                                   style="width:250px; padding:6px; border-radius:4px; border:1px solid #ccc;">
-                                        </div>
+                                                <div class="wa-field">
+                                                    <label for="productType">Product Type</label>
+                                                    <input id="productType" name="productType" type="text" />
+                                                </div>
+                                            </div>
+                                            <!-- /.form-grid -->
+                                            <!-- Submit -->
+                                            <div class="actions">
+                                                <wa-button type="submit" variant="neutral">Add Product</wa-button>
+                                            </div>
+                                        </form>
 
-                                        <!-- Handle -->
-                                        <div style="margin-bottom:12px;">
-                                            <label style="display:block; font-weight:600; margin-bottom:4px;">Vendor</label>
-                                            <input type="text" name="vendor"
-                                                   style="width:250px; padding:6px; border-radius:4px; border:1px solid #ccc;">
-                                        </div>
-
-                                        <!-- Handle -->
-                                        <div style="margin-bottom:12px;">
-                                            <label style="display:block; font-weight:600; margin-bottom:4px;">Product
-                                                Type</label>
-                                            <input type="text" name="productType"
-                                                   style="width:250px; padding:6px; border-radius:4px; border:1px solid #ccc;">
-                                        </div>
-
-                                        <!-- Submit -->
-                                        <wa-button type="submit" variant="neutral">Add Product</wa-button>
-                                    </form>
-
-                                </div>
-
+                                    </div>
+                                </wa-card>
 
                                 <table>
                                     <thead>

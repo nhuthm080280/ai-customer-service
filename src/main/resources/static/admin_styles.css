@@ -250,3 +250,11 @@ dialog {
         margin-top: 12px;
     }
 }
+
+/* wa-field helper so label + input align nicely */
+.wa-field { display:flex; flex-direction:column; gap:8px; margin-bottom:8px; }
+.wa-field label { font-weight:700; font-size:14px; color:#111827; }
+.wa-field input[type="text"] { padding:10px 12px; border-radius:8px; border:1px solid #e6e9ee; font-size:14px; }
+.form-grid { display:grid; grid-template-columns: repeat(1, minmax(0, 1fr)); gap:16px; align-items:start; }
+@media (max-width:900px){ .form-grid{ grid-template-columns: 1fr; } }
+.actions { display:flex; gap:8px; margin-top:12px; }

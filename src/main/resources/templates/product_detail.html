@@ -8,16 +8,14 @@
     <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.2"></script>
 
-    <!-- ✅ Web Awesome Theme (includes Design Tokens) -->
+    <!-- Web Awesome Theme + loader -->
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.0.0/dist-cdn/styles/themes/default.css">
-
-    <!-- ✅ Web Awesome Components Loader -->
     <script type="module"
             src="https://cdn.jsdelivr.net/npm/@awesome.me/webawesome@3.0.0/dist-cdn/webawesome.loader.js">
     </script>
 
-    <!-- Global Admin CSS -->
+    <!-- Admin CSS -->
     <link rel="stylesheet" th:href="@{/admin_styles.css}">
 </head>
 
@@ -32,76 +30,66 @@
         </div>
 
         <main class="page">
-            <div class="card">
+            <!-- Use wa-card for consistent WA look -->
+            <wa-card style="max-width:900px;">
+                <h2 slot="title">Update Product</h2>
 
-                <!-- UPDATE PRODUCT FORM -->
-                <div style="margin-bottom:16px; padding:16px; border:1px solid #ddd; border-radius:6px;">
-                    <h2 style="margin-bottom:16px;">Update Product</h2>
+                <!-- Stack for spacing -->
+                <div class="wa-stack" style="gap:16px;">
 
+                    <!-- HTMX form — preserve hx-put binding -->
                     <form th:action="@{/products/{id}(id=${product.id})}"
                           th:attr="hx-put=@{/products/{id}(id=${product.id})}"
                           method="post"
                           hx-target="#update-result"
                           hx-swap="innerHTML">
 
-                        <!-- Title -->
-                        <div style="margin-bottom:12px;">
-                            <label style="display:block; font-weight:600; margin-bottom:4px;">Title</label>
-                            <input type="text"
-                                   name="title"
-                                   th:value="${product.title}"
-                                   required
-                                   style="width:360px; max-width:100%; padding:8px; border-radius:4px; border:1px solid #ccc;">
-                        </div>
+                        <!-- Grid: two columns on wide screens -->
+                        <div class="form-grid">
+                            <div class="wa-field">
+                                <label for="title">Title</label>
+                                <input id="title" name="title" type="text" th:value="${product.title}" required />
+                            </div>
+                            <br>
+                            <div class="wa-field">
+                                <label for="handle">Handle</label>
+                                <input id="handle" name="handle" type="text" th:value="${product.handle}" />
+                            </div>
+                            <br>
+                            <div class="wa-field">
+                                <label for="vendor">Vendor</label>
+                                <input id="vendor" name="vendor" type="text" th:value="${product.vendor}" />
+                            </div>
+                            <br>
+                            <div class="wa-field">
+                                <label for="productType">Product Type</label>
+                                <input id="productType" name="productType" type="text" th:value="${product.productType}" />
+                            </div>
+                        </div> <!-- /.form-grid -->
 
-                        <!-- Handle -->
-                        <div style="margin-bottom:12px;">
-                            <label style="display:block; font-weight:600; margin-bottom:4px;">Handle</label>
-                            <input type="text"
-                                   name="handle"
-                                   th:value="${product.handle}"
-                                   style="width:360px; max-width:100%; padding:8px; border-radius:4px; border:1px solid #ccc;">
-                        </div>
-
-                        <!-- Vendor -->
-                        <div style="margin-bottom:12px;">
-                            <label style="display:block; font-weight:600; margin-bottom:4px;">Vendor</label>
-                            <input type="text"
-                                   name="vendor"
-                                   th:value="${product.vendor}"
-                                   style="width:360px; max-width:100%; padding:8px; border-radius:4px; border:1px solid #ccc;">
-                        </div>
-
-                        <!-- Product Type -->
-                        <div style="margin-bottom:12px;">
-                            <label style="display:block; font-weight:600; margin-bottom:4px;">Product Type</label>
-                            <input type="text"
-                                   name="productType"
-                                   th:value="${product.productType}"
-                                   style="width:360px; max-width:100%; padding:8px; border-radius:4px; border:1px solid #ccc;">
-                        </div>
-                        <!-- Buttons -->
-                        <div style="margin-top:16px;">
+                        <!-- Actions: Save uses the form submit; Back uses HTMX navigation -->
+                        <div class="actions">
                             <wa-button type="submit" variant="success">Save</wa-button>
                             <wa-button type="button" onclick="window.location.href='/products'">Back</wa-button>
                         </div>
                     </form>
 
                     <!-- Inline update message (auto-hide after 3s) -->
-                    <div id="update-result" style="margin-top:12px;"></div>
-                </div>
+                    <div id="update-result"></div>
 
-            </div>
+                </div> <!-- /.wa-stack -->
+            </wa-card>
+
         </main>
     </div>
 </div>
 
-<!-- fragment productUpdated kept -->
+<!-- success fragment remains -->
 <th:block th:fragment="productUpdated">
     <div id="update-result" style="padding:8px 0;">
         <div style="padding:10px; border-radius:4px; border:1px solid #e6e6e6; background:#fff;">
             <div>
-                <p th:color="blue" style="margin:0; color:blue;">
+                <p style="margin:0; color:var(--wa-color-primary);">
                     Product "<span th:text="${product.title}">Product Name</span>" has been updated.
                 </p>
             </div>
@@ -110,6 +98,7 @@
 </th:block>
 
 <script>
+    // keep the auto-hide behaviour
     document.body.addEventListener("htmx:afterSwap", function () {
         const updateResult = document.getElementById('update-result');
         if (updateResult && updateResult.innerText.trim().length > 0) {
@@ -120,6 +109,5 @@
         }
     });
 </script>
-
 </body>
 </html>
