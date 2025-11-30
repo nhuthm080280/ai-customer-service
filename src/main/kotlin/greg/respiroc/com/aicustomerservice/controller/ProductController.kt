@@ -22,11 +22,13 @@ import kotlin.collections.mapOf
 class ProductController(private val productRepository: ProductRepository) {
     private val logger = LoggerFactory.getLogger(ProductController::class.java)
 
+    // Main products page
     @GetMapping("/products")
     fun productsPage(model: Model): String {
         return "products"
     }
 
+    // Product list - returns only the table fragment for HTMX
     @GetMapping("/products/list")
     fun productsList(
         @RequestParam(name = "page", defaultValue = "0") page: Int,
@@ -56,6 +58,7 @@ class ProductController(private val productRepository: ProductRepository) {
     }
 
 
+    // Create product
     // HTMX form posts here (hx-post="/products")
     @PostMapping("/products")
     fun createProduct(@ModelAttribute("newProduct") form: Product, model: Model): String {
@@ -93,6 +96,7 @@ class ProductController(private val productRepository: ProductRepository) {
         return "products :: table"
     }
 
+    // Search products
     @GetMapping("/products/search")
     fun searchPage(): String {
         return "products_search"
@@ -107,6 +111,7 @@ class ProductController(private val productRepository: ProductRepository) {
         return "products_search :: searchResults"
     }
 
+    // Update product
     @GetMapping("/products/{id}")
     fun productDetail(@PathVariable id: Long, model: Model): String {
         val product = productRepository.findById(id)
@@ -131,6 +136,7 @@ class ProductController(private val productRepository: ProductRepository) {
         return "product_detail :: productUpdated"
     }
 
+    // Delete product
     @DeleteMapping("/products/{id}")
     fun deleteProduct(
         @PathVariable id: Long,

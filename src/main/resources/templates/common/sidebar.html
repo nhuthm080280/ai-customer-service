@@ -5,20 +5,4 @@
         <a href="/" th:href="@{'/'}">Home</a>
         <a href="/products" th:href="@{'/products'}">Products</a>
     </nav>
-
-    <!-- optional WebAwesome quick actions -->
-    <div style="margin-top:12px; padding:8px;">
-        <wa-button variant="ghost"
-                   hx-get="/products/search"
-                   hx-push-url="true">
-            Search
-        </wa-button>
-
-        <wa-button variant="ghost"
-                   hx-get="/products"
-                   hx-push-url="true">
-            Products
-        </wa-button>
-
-    </div>
 </aside>

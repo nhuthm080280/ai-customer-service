@@ -42,10 +42,15 @@
                         <p>This is the home page.</p>
 
                         <div style="margin-top:12px;">
-                            <wa-button variant="primary" onclick="window.location.href='/products'">
+                            <wa-button type="button" variant="neutral"
+                                       hx-get="/products"
+                                       hx-target="body"
+                                       hx-swap="outerHTML"
+                                       hx-push-url="true">
                                 Go to Products
                             </wa-button>
                         </div>
+
                     </div>
                 </wa-card>
             </div>
